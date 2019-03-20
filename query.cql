@@ -11,40 +11,94 @@ MATCH (e:Entity)-[k:DEFINITION]->(d:Definition)
 WHERE e.name = 'x'
 RETURN k.description,e.description,d.description etc...
 
-1. Counting the number of Vertices (nodes)
+4.Counting the number of Vertices (nodes)
 
-   match (n:Professionals)
+   match (n:Types)
    return count(n)
 
-2. Counting the number of Edges (relationships)
+5. Count the number of Edges (relationships)
 
-   match (n:Professionals)-[r]->()
+   match (n:x)-[r]->()
    return count (r)
 
-3. Find number of Vertices and edges 
-   MATCH (n) WITH COUNT(n) AS numVertices
+6. Find number of Vertices and edges 
+   MATCH (n) WITH COUNT(n) AS verNum
    MATCH (a)-[e]->(b)
-   RETURN numVertices, COUNT(e) AS numEdges
+   RETURN verNum, COUNT(e) AS numEdges
 
-4. Finding the leaf nodes
-   match (n:Professionals)-[r:FRIEND]->(m)
+7. Find the leaf nodes
+   match (n:x)-[r:REL]->(n)
    where not ((m)-->())
    return m
 
-5. Finding the types (Label) of a node:
+8. Finding the types (Label) of a node:
    match (n)
-   where n.Name = 'Robin'
+   where n.Name = 'X'
    return labels(n)
 
-6.Create users:
+9.Create users:
 CALL dbms.security.createUser("username", "password", FALSE)
 List all users:
 CALL dbms.security.listUsers()
 Delete a user:
 CALL dbms.security.deleteUser(username)
 
-7.Connet two nodes using any relationships
+10.Connet two nodes using any relationships
 
 MATCH (m:node1)
 MATCH (x:node2)
 MERGE (x)-[:CONNECTION]->(m);
+
+11.For deleting specific relationships,
+MATCH ()-[p:CONNECTION]->(m:Y)
+DELETE p
+
+12.
+MATCH (m:node1)-[c:CONNECTION]->(x:node2)
+DELETE m -Deletes Node m
+DELETE x -deletes node x
+delete c -deletes relationship c
+
+13.Create a single node
+CREATE 
+(E:e{fieldname:"e1"}),
+
+14.delete all nodes starting from a single node X with a certain relationship name
+MATCH (m:X)-[p:CONTAINS]->()
+DELETE p
+
+15.Delete relationship with id
+start r=rel(297) 
+DELETE r
+
+16.Rename a Node
+
+MATCH (e:Node { Name: 'nodeName' })
+SET e.Name = 'newname'
+RETURN e
+
+17.Fetch all relationships
+
+MATCH (x:Node1)-[:REL]-> (n:entity)
+RETURN distinct n.Name
+
+18.return all nodes of distinct type
+MATCH (n:Type)
+RETURN distinct n.name
+
+19.returns all entities
+MATCH (n:entity)
+RETURN distinct n.Name
+
+20.Update relationships property
+MATCH (x:Node1)-[k:CONFIGURE]->(e:Type{name:'node2'})
+SET k.Description = 'fjghjhgjfh'
+RETURN x,k,e
+
+21.Delete a node by id
+MATCH (p:entity) where ID(p)=926
+delete p
+
+
+
+
